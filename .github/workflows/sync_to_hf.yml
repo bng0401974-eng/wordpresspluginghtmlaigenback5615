@@ -16,15 +16,16 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: Install dependencies
+        run: pip install huggingface_hub
+
       - name: Generate Content
-        run: |
-          python engine_builder.py
+        run: python engine_builder.py
 
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          pip install huggingface_hub
           python -c "
           from huggingface_hub import HfApi
           api = HfApi()
