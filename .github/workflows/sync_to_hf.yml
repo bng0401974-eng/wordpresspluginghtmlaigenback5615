@@ -1,4 +1,5 @@
 name: Sync to HF Static
+
 on:
   push:
     branches: [main]
@@ -7,7 +8,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -15,25 +16,23 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Generate Index
-        run: python engine_builder.py
+      - name: Generate Content
+        run: |
+          python engine_builder.py
 
-      - name: Push to HF
+      - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          # 1. Конфигурирај го корисникот
-          git config --global user.email "bot@lativm.com"
-          git config --global user.name "LATIVM Bot"
-          
-          # 2. Иницијализирај го далечинското
-          git remote add huggingface https://Dame1612:$HF_TOKEN@huggingface.co/spaces/Dame1612/wordpresspluginghtmlaigenback5615
-          
-          # 3. Осигурај се дека index.html постои
-          ls -la index.html
-          
-          # 4. Форсирано префрлање
-          git add -f index.html
-          git commit -m "Deploy from GitHub Actions" || echo "No changes to commit"
-          git push --force huggingface main:main
-          
+          pip install huggingface_hub
+          python -c "
+          from huggingface_hub import HfApi
+          api = HfApi()
+          api.upload_file(
+              path_or_fileobj='index.html',
+              path_in_repo='index.html',
+              repo_id='Dame1612/wordpresspluginghtmlaigenback5615',
+              repo_type='space',
+              token='$HF_TOKEN'
+          )
+          "
