@@ -1,19 +1,15 @@
-# app.py
 import os
-from flask import Flask, send_file
+from flask import Flask, send_from_directory
 
 app = Flask(__name__)
-
-# Патека до твојот генериран HTML фајл
-OUTPUT_FILE = "lativm_output.html"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/')
 def home():
-    # Провери дали фајлот постои
-    if os.path.exists(OUTPUT_FILE):
-        return send_file(OUTPUT_FILE)
-    else:
-        return "LATIVM AI сеуште генерира содржина... почекај малку.", 404
+    file_path = os.path.join(BASE_DIR, "lativm_output.html")
+    if os.path.exists(file_path):
+        return send_from_directory(BASE_DIR, "lativm_output.html")
+    return "LATIVM AI сеуште генерира содржина...", 404
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860)
