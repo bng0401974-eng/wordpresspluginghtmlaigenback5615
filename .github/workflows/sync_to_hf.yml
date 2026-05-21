@@ -6,12 +6,14 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Го решава предупредувањето
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Ажурирано на v4
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # v5 е понова
         with:
           python-version: '3.9'
 
@@ -27,8 +29,7 @@ jobs:
           git config --global user.email "bot@lativm.com"
           git config --global user.name "LATIVM Bot"
           git remote add huggingface https://Dame1612:$HF_TOKEN@huggingface.co/spaces/Dame1612/wordpresspluginghtmlaigenback5615
-          
-          # Ова е клучниот дел за да немаш 128 грешка:
-          git add .
-          git commit -m "Автоматско генерирање содржина" || echo "No changes to commit"
-          git push --force huggingface main
+          # Исчисти ги претходните commit-и за да не е претешко за HF
+          git add -A
+          git commit -m "Auto-deploy: $(date)" || echo "No changes"
+          git push --force huggingface main:main
