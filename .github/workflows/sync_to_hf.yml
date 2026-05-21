@@ -19,11 +19,12 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install huggingface_hub requests
+        run: pip install huggingface_hub
 
       - name: Generate Content
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        timeout-minutes: 5
         run: python engine_builder.py
 
       - name: Push to Hugging Face
