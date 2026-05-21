@@ -27,6 +27,8 @@ jobs:
           git config --global user.email "bot@lativm.com"
           git config --global user.name "LATIVM Bot"
           git remote add huggingface https://Dame1612:$HF_TOKEN@huggingface.co/spaces/Dame1612/wordpresspluginghtmlaigenback5615
+          
+          # Ова е новиот, безбеден начин
           git add index.html
-          git commit -m "Автоматско ажурирање на index.html" || echo "No changes"
-          git push --force huggingface main
+          git commit -m "Deploy: $(date)" || echo "No changes"
+          git push --force huggingface main:main
