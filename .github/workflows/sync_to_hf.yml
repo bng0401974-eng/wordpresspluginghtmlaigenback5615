@@ -8,7 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Ажурирано на v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
       - name: Generate Content
         run: |
@@ -21,7 +26,9 @@ jobs:
         run: |
           git config --global user.email "bot@lativm.com"
           git config --global user.name "LATIVM Bot"
-          git remote add huggingface https://huggingface.co/spaces/Dame1612/wordpresspluginghtmlaigenback5615
+          git remote add huggingface https://Dame1612:$HF_TOKEN@huggingface.co/spaces/Dame1612/wordpresspluginghtmlaigenback5615
+          
+          # Ова е клучниот дел за да немаш 128 грешка:
           git add .
-          git commit -m "Автоматски deploy на LATIVM сервис [skip ci]"
+          git commit -m "Автоматско генерирање содржина" || echo "No changes to commit"
           git push --force huggingface main
