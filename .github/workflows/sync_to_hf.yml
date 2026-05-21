@@ -19,7 +19,9 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install huggingface_hub
+        run: |
+          python -m pip install --upgrade pip
+          pip install huggingface_hub requests
 
       - name: Generate Content
         env:
