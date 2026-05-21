@@ -5,21 +5,15 @@ def generate():
     <html lang="mk">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>LATIVM AI 2.0 | Dashboard</title>
+        <title>TEST TEST TEST</title>
         <style>
-            body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #f8fafc; text-align: center; padding: 50px; }
-            .container { background: #1e293b; padding: 30px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-            h1 { color: #38bdf8; }
-            p { color: #94a3b8; }
+            body { font-family: sans-serif; background: #ea580c; color: white; text-align: center; padding: 100px; }
+            h1 { font-size: 50px; }
         </style>
     </head>
     <body>
-        <div class="container">
-            <h1>LATIVM AI 2.0</h1>
-            <p>Статус: Системот е целосно функционален.</p>
-            <p>Последно ажурирање: 2026-05-22</p>
-        </div>
+        <h1>ТЕСТ ПОМИНА УСПЕШНО!</h1>
+        <p>Автоматизацијата работи совршено на: 2026-05-22</p>
     </body>
     </html>
     """
