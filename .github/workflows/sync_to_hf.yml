@@ -1,4 +1,4 @@
-name: Sync to Hugging Face
+name: Sync to HF Static
 on:
   push:
     branches: [main]
@@ -7,29 +7,26 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Го решава предупредувањето
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5 # v5 е понова
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.9'
 
-      - name: Generate Content
-        run: |
-          pip install flask
-          python engine_builder.py
+      - name: Generate Index
+        run: python engine_builder.py
 
-      - name: Push to Hugging Face
+      - name: Push to HF
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git config --global user.email "bot@lativm.com"
           git config --global user.name "LATIVM Bot"
           git remote add huggingface https://Dame1612:$HF_TOKEN@huggingface.co/spaces/Dame1612/wordpresspluginghtmlaigenback5615
-          # Исчисти ги претходните commit-и за да не е претешко за HF
-          git add -A
-          git commit -m "Auto-deploy: $(date)" || echo "No changes"
-          git push --force huggingface main:main
+          git add index.html
+          git commit -m "Автоматско ажурирање на index.html" || echo "No changes"
+          git push --force huggingface main
