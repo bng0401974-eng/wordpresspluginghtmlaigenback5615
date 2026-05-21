@@ -9,12 +9,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+
+      - name: Generate Content
+        run: |
+          pip install flask
+          python engine_builder.py
 
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          git config --global user.email "bot@lativm.com"
+          git config --global user.name "LATIVM Bot"
           git remote add huggingface https://huggingface.co/spaces/Dame1612/wordpresspluginghtmlaigenback5615
+          git add .
+          git commit -m "Автоматски deploy на LATIVM сервис [skip ci]"
           git push --force huggingface main
