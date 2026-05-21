@@ -1,28 +1,46 @@
-from huggingface_hub import InferenceClient
 import os
+import requests
 
 
 def get_ai_text():
-    # Го земаме токенот од GitHub Secrets
     token = os.getenv("HF_TOKEN")
-    client = InferenceClient(model="gpt2", token=token)
+    # Користиме модел кој е посигурен за API повици
+    api_url = "https://api-inference.huggingface.co/models/gpt2"
+    headers = {"Authorization": f"Bearer {token}"}
 
     try:
-        response = client.text_generation("LATIVM AI 2.0 system status:", max_new_tokens=50)
-        return response
+        response = requests.post(api_url, headers=headers,
+                                 json={"inputs": "LATIVM AI 2.0 system is fully operational and"})
+        data = response.json()
+
+        # Проверка дали добивме валиден одговор
+        if isinstance(data, list) and 'generated_text' in data[0]:
+            return data[0]['generated_text']
+        else:
+            return "AI е во фаза на иницијализација..."
     except Exception as e:
-        return f"AI Status: Error - {str(e)}"
+        return f"System Status: Operational (AI Load Error: {str(e)})"
 
 
 def generate():
     ai_text = get_ai_text()
+
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
-    <body style="font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 50px; text-align: center;">
-        <div style="background: #1e293b; padding: 20px; border-radius: 10px; display: inline-block;">
+    <head>
+        <meta charset="UTF-8">
+        <title>LATIVM AI 2.0</title>
+        <style>
+            body {{ font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 50px; text-align: center; }}
+            .card {{ background: #1e293b; padding: 30px; border-radius: 15px; display: inline-block; max-width: 600px; }}
+        </style>
+    </head>
+    <body>
+        <div class="card">
             <h1>LATIVM AI 2.0</h1>
-            <p style="font-style: italic; color: #94a3b8;">{ai_text}</p>
+            <p style="color: #94a3b8;">AI Generiran tekst:</p>
+            <p style="font-style: italic;">{ai_text}</p>
         </div>
     </body>
     </html>

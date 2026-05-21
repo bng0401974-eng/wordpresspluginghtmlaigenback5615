@@ -19,7 +19,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install huggingface_hub
+        run: pip install huggingface_hub requests
 
       - name: Generate Content
         env:
@@ -34,10 +34,10 @@ jobs:
           from huggingface_hub import HfApi
           api = HfApi()
           api.upload_file(
-              path_or_fileobj='index.html',
-              path_in_repo='index.html',
-              repo_id='Dame1612/wordpresspluginghtmlaigenback5615',
-              repo_type='space',
-              token='$HF_TOKEN'
+            path_or_fileobj='index.html',
+            path_in_repo='index.html',
+            repo_id='Dame1612/wordpresspluginghtmlaigenback5615',
+            repo_type='space',
+            token='$HF_TOKEN'
           )
           "
