@@ -13,7 +13,7 @@ def generate():
 
     try:
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model='gemini-1.5-flash',  # Сменивме од 2.0 на 1.5-flash
             contents="Write a short, professional status update for LATIVM AI 2.0 system."
         )
         ai_text = response.text
