@@ -3,18 +3,20 @@ from google import genai
 
 
 def generate():
-    # Го земаме клучот од GitHub Secrets
     api_key = os.environ.get("GEMINI_API_KEY")
     client = genai.Client(api_key=api_key)
 
     try:
-        # Ова име е стандард за сите платени и бесплатни сметки
+        # Користиме целосна патека кон моделот (некои платени сметки го бараат ова)
+        model_name = 'models/gemini-1.5-flash'
+
         response = client.models.generate_content(
-            model='gemini-1.5-flash',
+            model=model_name,
             contents="Write a short, professional status update for LATIVM AI 2.0 system."
         )
         ai_text = response.text
     except Exception as e:
+        # Додаваме дополнителен текст за да видиме што точно не е во ред ако пак падне
         ai_text = f"Greska: {str(e)}"
 
     html_content = f"""
