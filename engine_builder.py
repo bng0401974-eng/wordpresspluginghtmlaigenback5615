@@ -33,7 +33,7 @@ def generate():
     </html>
     """
     with open("index.html", "w", encoding="utf-8") as f:
-        f.write(wer=html_content)
+        f.write(html_content)  # Ова е правилниот начин, без 'wer='
 
 
 if __name__ == "__main__":
