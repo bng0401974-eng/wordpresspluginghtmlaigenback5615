@@ -1,2 +1,3 @@
 google-genai
 huggingface_hub
+google-cloud-aiplatform

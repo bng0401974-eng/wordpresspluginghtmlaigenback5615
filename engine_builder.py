@@ -1,33 +1,29 @@
 import os
-from google import genai
+import vertexai
+from vertexai.generative_models import GenerativeModel
 
 
 def generate():
-    api_key = os.environ.get("GEMINI_API_KEY")
-    client = genai.Client(api_key=api_key)
+    # Постави го проектот (ова обично го бара Vertex AI)
+    # Замени 'tvoj-project-id' со ID-то од твојот Google Cloud проект
+    project_id = "tvoj-project-id"
+    location = "us-central1"
+
+    vertexai.init(project=project_id, location=location)
+    model = GenerativeModel("gemini-1.5-flash")
 
     try:
-        # Користиме целосна патека кон моделот (некои платени сметки го бараат ова)
-        model_name = 'models/gemini-1.5-flash'
-
-        response = client.models.generate_content(
-            model=model_name,
-            contents="Write a short, professional status update for LATIVM AI 2.0 system."
-        )
+        response = model.generate_content("Write a short, professional status update for LATIVM AI 2.0 system.")
         ai_text = response.text
     except Exception as e:
-        # Додаваме дополнителен текст за да видиме што точно не е во ред ако пак падне
-        ai_text = f"Greska: {str(e)}"
+        ai_text = f"Vertex Error: {str(e)}"
 
     html_content = f"""
     <!DOCTYPE html>
-    <html lang="mk">
-    <head><meta charset="UTF-8"></head>
-    <body style="background:#0f172a; color:#fff; font-family:sans-serif; text-align:center; padding:50px;">
-        <div style="background:#1e293b; padding:30px; border-radius:15px; display:inline-block;">
-            <h1>LATIVM AI 2.0</h1>
-            <p>{ai_text}</p>
-        </div>
+    <html>
+    <body style="background:#0f172a; color:#fff; text-align:center; padding:50px;">
+        <h1>LATIVM AI 2.0</h1>
+        <p>{ai_text}</p>
     </body>
     </html>
     """
