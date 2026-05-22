@@ -3,17 +3,18 @@ from google import genai
 
 
 def generate():
-    # Го влече клучот директно од GitHub Secrets
     api_key = os.environ.get("GEMINI_API_KEY")
 
     if not api_key:
-        raise ValueError("ГРЕШКА: GEMINI_API_KEY не е пронајден во системските променливи!")
+        raise ValueError("ГРЕШКА: Клучот не е пронајден!")
 
     client = genai.Client(api_key=api_key)
 
     try:
+        # Бидејќи имаш платен клуч, користи го 'gemini-1.5-pro' за најдобри резултати
+        # или 'gemini-1.5-flash' за најголема брзина.
         response = client.models.generate_content(
-            model='gemini-1.5-flash',  # Сменивме од 2.0 на 1.5-flash
+            model='gemini-1.5-pro',
             contents="Write a short, professional status update for LATIVM AI 2.0 system."
         )
         ai_text = response.text
@@ -33,7 +34,7 @@ def generate():
     </html>
     """
     with open("index.html", "w", encoding="utf-8") as f:
-        f.write(html_content)  # Ова е правилниот начин, без 'wer='
+        f.write(html_content)
 
 
 if __name__ == "__main__":
