@@ -1,42 +1,39 @@
 import os
-import requests
-import json
-
+import google.generativeai as genai
 
 def generate():
-    token = os.getenv("HF_TOKEN")
-    api_url = "https://api-inference.huggingface.co/models/gpt2"
-    headers = {"Authorization": f"Bearer {token}"}
+    # Конфигурација
+    genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
-    # Прво пробуваме со AI
-    ai_text = "LATIVM AI 2.0: Систем во иницијализација..."
+    # Генерирање на содржина
     try:
-        response = requests.post(api_url, headers=headers, json={"inputs": "LATIVM AI 2.0 system status:"}, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            if isinstance(data, list) and len(data) > 0:
-                ai_text = data[0].get('generated_text', "AI статус: Активен")
-    except:
-        ai_text = "AI статус: Режим на подготвеност"
+        response = model.generate_content("Give a short, professional status update for LATIVM AI 2.0. Under 30 words.")
+        ai_text = response.text
+    except Exception:
+        ai_text = "LATIVM AI 2.0: Системот е во подготвеност."
 
-    # Креирање на HTML-от со дефиниран UTF-8 енкодинг
-    html_content = f"""<!DOCTYPE html>
-<html lang="mk">
-<head>
-    <meta charset="UTF-8">
-    <title>LATIVM AI 2.0</title>
-</head>
-<body style="background:#0f172a; color:#fff; font-family:sans-serif; text-align:center; padding:50px;">
-    <div style="background:#1e293b; padding:30px; border-radius:15px; display:inline-block;">
-        <h1>LATIVM AI 2.0</h1>
-        <p>{ai_text}</p>
-    </div>
-</body>
-</html>"""
-
+    # Запишување во HTML
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="mk">
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {{ background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding: 50px; }}
+            .card {{ background: #1e293b; padding: 30px; border-radius: 15px; display: inline-block; }}
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1>LATIVM AI 2.0</h1>
+            <p>{ai_text}</p>
+        </div>
+    </body>
+    </html>
+    """
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
-
 
 if __name__ == "__main__":
     generate()
