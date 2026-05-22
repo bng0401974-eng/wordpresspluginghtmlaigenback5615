@@ -3,11 +3,15 @@ from google import genai
 
 
 def generate():
-    # Иницијализација со новата библиотека
-    client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+    # Го влече клучот директно од GitHub Secrets
+    api_key = os.environ.get("GEMINI_API_KEY")
+
+    if not api_key:
+        raise ValueError("ГРЕШКА: GEMINI_API_KEY не е пронајден во системските променливи!")
+
+    client = genai.Client(api_key=api_key)
 
     try:
-        # Повик кон моделот
         response = client.models.generate_content(
             model='gemini-2.0-flash',
             contents="Write a short, professional status update for LATIVM AI 2.0 system."
@@ -29,7 +33,7 @@ def generate():
     </html>
     """
     with open("index.html", "w", encoding="utf-8") as f:
-        f.write(html_content)
+        f.write(wer=html_content)
 
 
 if __name__ == "__main__":
