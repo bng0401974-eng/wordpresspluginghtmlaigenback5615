@@ -7,7 +7,6 @@ def generate():
     client = genai.Client(api_key=api_key)
 
     try:
-        # Сега кога клучот е чист (не-платен од AI Studio), ова ќе работи перфектно
         response = client.models.generate_content(
             model='gemini-1.5-flash',
             contents="Write a short, professional status update for LATIVM AI 2.0 system."
